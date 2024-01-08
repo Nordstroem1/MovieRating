@@ -24,6 +24,7 @@ namespace MovieRating.UserControls
         Login login;
         User currentuser = null;
 
+
         public MovieManager()
         {
             InitializeComponent();
@@ -142,20 +143,6 @@ namespace MovieRating.UserControls
                 ratingslider.Value = 0;
             }
         }
-        
-        //enum som binds ihop med combobox
-        public enum Genra
-        {
-            Action,
-            Adventure,
-            Comedy,
-            Drama,
-            Horror,
-            Romance,
-            SciFi,
-            Thriller
-        }
-
         
     }
 }
