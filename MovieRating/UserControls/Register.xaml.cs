@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,7 +24,7 @@ namespace MovieRating.UserControls
     public partial class Register : UserControl
     {
         Login login;
-
+        bool RegisterOK = false;
         public Register()
         {
             InitializeComponent();
@@ -44,40 +45,62 @@ namespace MovieRating.UserControls
             string name = User_box.Text;
             string password = Psw_box.Password;
             string repeatPsw = Repeat_Box.Password;
+            
+            //Användarnamn måste var längre än 5 tecken
+            Regex regex = new Regex(@"^[a-zA-Z0-9]{6,}$");
 
-            for (int i = 0; i < UserList.Count; i++)
+            if (regex.IsMatch(name))
             {
-                if (UserList[i].UserName.ToLower() == name.ToLower())
+                Lbl_UsrN_error.Visibility = Visibility.Hidden;
+                RegisterOK = true;
+
+                for (int i = 0; i < UserList.Count; i++)
                 {
-                    Error_label.Visibility = Visibility.Visible;
-                    return;
+                    if (UserList[i].UserName.ToLower() == name.ToLower())
+                    {
+                        Error_label.Visibility = Visibility.Visible;
+                        return;
+                    }
                 }
-            }
 
-            if (password.ToLower() != repeatPsw.ToLower())
-            {
-                Password_label.Visibility = Visibility.Visible;
+                if (password.ToLower() != repeatPsw.ToLower())
+                {
+                    Password_label.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    UserList.Add(new User(name, password));
+                    User_box.Clear();
+                    Psw_box.Clear();
+                    Repeat_Box.Clear();
+                }
             }
             else
             {
-                UserList.Add(new User(name, password));
-                User_box.Clear();
-                Psw_box.Clear ();
-                Repeat_Box.Clear ();
+                Lbl_UsrN_error.Visibility = Visibility.Visible;
+                RegisterOK = false;
             }
         }
-
+        
+        //om regexen är korrekt kommer användaren till Login annars är den kvar.
         private void Register_btn_Click(object sender, RoutedEventArgs e)
         {
             CreateUser();
-            this.Visibility = Visibility.Hidden;
-            login.Visibility = Visibility.Visible;
+            if (RegisterOK == true)
+            {
+                this.Visibility = Visibility.Hidden;
+                login.Visibility = Visibility.Visible;
+            }
         }
 
+       
         private void GoBack_btm_Click(object sender, RoutedEventArgs e)
         {
+
+
             this.Visibility = Visibility.Hidden;
             login.Visibility = Visibility.Visible;
+
         }
     }
 }

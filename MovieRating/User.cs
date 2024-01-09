@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MovieRating
 {
+    //Varje user tilldelas en specifik movielist 
     public class User
     {
         public List<Movies> MovieList = new List<Movies>();

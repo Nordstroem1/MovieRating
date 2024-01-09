@@ -71,8 +71,8 @@ namespace MovieRating.UserControls
                 string title = Title_box.Text;
                 string genra = Genra_box.Text;
                 string description = Description_box.Text;
-                string length = $"{Length_box.Text} h";
-                string rating = $"Rating: {ratingslider.Value}";
+                string length = Length_box.Text;
+                string rating = ratingslider.Value.ToString();
 
                 currentuser.MovieList.Add(new Movies(title, genra, description, length, rating));
 
@@ -92,13 +92,6 @@ namespace MovieRating.UserControls
             {
                 ErrorFeild_label.Visibility = Visibility.Visible;
             }
-        }
-
-        //Length_box accepterar enbart numerics och , 
-        private void Length_box_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("^[0-9]*\\.?[0-9]+$");
-            e.Handled = regex.IsMatch(e.Text);
         }
 
         //Objektet användaren klickar på ska dyka upp i respektive box/slider.
@@ -143,6 +136,33 @@ namespace MovieRating.UserControls
                 ratingslider.Value = 0;
             }
         }
-        
+
+        //Length_box accepterar enbart numerics och , 
+        //Om inte regex matchar blir e=rtrue och inget händer i textboxen
+        private void Length_box_PreviewTextInput_1(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("^[0-9,]+$");
+
+            if (!regex.IsMatch(e.Text))
+            {
+                e.Handled = true;
+            }
+        }
+
+        //här läggs sql-kommandon in för att filtrera information om vilka filmer som visas
+        private void RatingO5_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        //här läggs sql-kommandon in för att filtrera information om vilka filmer som visas
+        private void RatingU5_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        //här läggs sql-kommandon in för att filtrera information om vilka filmer som visas
+        private void LengtBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

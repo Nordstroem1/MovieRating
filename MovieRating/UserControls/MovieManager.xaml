@@ -558,7 +558,7 @@
                             FontFamily="OCR A Extended"
                             FontSize="17"
                             FontWeight="SemiBold"
-                            Text="{Binding Path=Director}" />
+                            Text="{Binding Path=Genra}" />
                         <TextBlock
                             FontFamily="OCR A Extended"
                             FontSize="16"
@@ -568,13 +568,13 @@
                             FontFamily="OCR A Extended"
                             FontSize="16"
                             FontWeight="Bold"
-                            Text="{Binding Path=Length}" />
+                            Text="{Binding Path=Length, StringFormat={}{0} h}" />
 
                         <TextBlock
                             FontFamily="OCR A Extended"
                             FontSize="17"
                             FontWeight="DemiBold"
-                            Text="{Binding Path=Rating}" />
+                            Text="{Binding Path=Rating, StringFormat=Rating: {0}}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -737,7 +737,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             VerticalContentAlignment="Center"
-            TabIndex="13" />
+            TabIndex="13" PreviewTextInput="Length_box_PreviewTextInput_1" />
         <Label
             Grid.Row="0"
             Grid.Column="0"
@@ -778,7 +778,7 @@
                     Content="Rating over 5"
                     Cursor="Hand"
                     FontSize="14"
-                    Foreground="#FFFF9600" />
+                    Foreground="#FFFF9600" Click="RatingO5_Click" />
 
                 <Button
                     x:Name="RatingU5"
@@ -789,7 +789,7 @@
                     Content="Rating under 5"
                     Cursor="Hand"
                     FontSize="14"
-                    Foreground="#FFFF9600" />
+                    Foreground="#FFFF9600" Click="RatingU5_Click" />
                 <Button
                     x:Name="LengtBtn"
                     Width="130"
@@ -799,7 +799,7 @@
                     Content="Length under 2h"
                     Cursor="Hand"
                     FontSize="14"
-                    Foreground="#FFFF9600" />
+                    Foreground="#FFFF9600" Click="LengtBtn_Click" />
             </StackPanel>
         </Expander>
 

@@ -271,7 +271,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             VerticalContentAlignment="Center"
-            Foreground="#FFCD1818"
+            Foreground="Black"
             TabIndex="5" />
         <PasswordBox
             x:Name="Psw_box"
@@ -372,5 +372,6 @@
             Content="Passwords need to match"
             FontSize="16"
             Visibility="Hidden" />
+        <Label x:Name="Lbl_UsrN_error" Content="Your username Must be longer then 5 characters" HorizontalAlignment="Left" Margin="200,18,0,0" VerticalAlignment="Top" Grid.Row="1" Width="410" Foreground="Red" FontSize="18" Visibility="Hidden"/>
     </Grid>
 </UserControl>
