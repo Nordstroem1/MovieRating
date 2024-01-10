@@ -760,48 +760,6 @@
             Content="Save"
             FontFamily="OCR A Extended"
             Visibility="Hidden" />
-        <Expander
-            Margin="10"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            FontFamily="OCR A Extended"
-            FontSize="17"
-            Foreground="#FFFF9600"
-            Header="Filter">
-            <StackPanel Width="130" Height="135">
-                <Button
-                    x:Name="RatingO5"
-                    Width="130"
-                    Height="25"
-                    Background="{x:Null}"
-                    BorderBrush="{x:Null}"
-                    Content="Rating over 5"
-                    Cursor="Hand"
-                    FontSize="14"
-                    Foreground="#FFFF9600" Click="RatingO5_Click" />
-
-                <Button
-                    x:Name="RatingU5"
-                    Width="130"
-                    Height="25"
-                    Background="{x:Null}"
-                    BorderBrush="{x:Null}"
-                    Content="Rating under 5"
-                    Cursor="Hand"
-                    FontSize="14"
-                    Foreground="#FFFF9600" Click="RatingU5_Click" />
-                <Button
-                    x:Name="LengtBtn"
-                    Width="130"
-                    Height="25"
-                    Background="{x:Null}"
-                    BorderBrush="{x:Null}"
-                    Content="Length under 2h"
-                    Cursor="Hand"
-                    FontSize="14"
-                    Foreground="#FFFF9600" Click="LengtBtn_Click" />
-            </StackPanel>
-        </Expander>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="470" />

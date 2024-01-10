@@ -1,0 +1,276 @@
+﻿<UserControl
+    x:Class="MovieRating.UserControls.MovieMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MovieRating.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle
+                            Margin="2"
+                            SnapsToDevicePixels="true"
+                            Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                            StrokeDashArray="1 2"
+                            StrokeThickness="1" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD" />
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070" />
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD" />
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1" />
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6" />
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B" />
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4" />
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5" />
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383" />
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}" />
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border
+                            x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter
+                                x:Name="contentPresenter"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Focusable="False"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource Button.MouseOver.Border}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource Button.Pressed.Background}" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource Button.Pressed.Border}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource Button.Disabled.Background}" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource Button.Disabled.Border}" />
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{StaticResource Button.Disabled.Foreground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="#FF363535">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ListBox
+            x:Name="MovieBank_box"
+            Grid.Column="1"
+            Width="400"
+            Height="450"
+            HorizontalAlignment="Right"
+            d:ItemsSource="{d:SampleData ItemCount=1}"
+            Background="#FF363535"
+            FontFamily="OCR A Extended"
+            FontSize="19"
+            Foreground="#FFFF9600">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Text="{Binding Path=Title}" />
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="17"
+                            FontWeight="SemiBold"
+                            Text="{Binding Path=Genra}" />
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{Binding Path=Description}" />
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Text="{Binding Path=Length, StringFormat={}{0} h}" />
+
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="17"
+                            FontWeight="DemiBold"
+                            Text="{Binding Path=Rating, StringFormat=Rating: {0}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Expander
+            Height="115"
+            Margin="0,80,5,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            FontFamily="OCR A Extended"
+            FontSize="17"
+            Foreground="#FFFF9600"
+            Header="Filter">
+            <StackPanel Width="130" Height="135">
+                <Button
+                    x:Name="FilterAÖ"
+                    Width="130"
+                    Height="25"
+                    Background="{x:Null}"
+                    BorderBrush="{x:Null}"
+                    Click="FilterAÖ_Click"
+                    Content="Title A-Ö"
+                    Cursor="Hand"
+                    FontSize="14"
+                    Foreground="#FFFF9600" />
+
+                <Button
+                    x:Name="RatingU5"
+                    Width="130"
+                    Height="25"
+                    Background="{x:Null}"
+                    BorderBrush="{x:Null}"
+                    Click="RatingU5_Click"
+                    Content="Rating under 5"
+                    Cursor="Hand"
+                    FontSize="14"
+                    Foreground="#FFFF9600" />
+                <Button
+                    x:Name="LengtBtn"
+                    Width="130"
+                    Height="25"
+                    Background="{x:Null}"
+                    BorderBrush="{x:Null}"
+                    Click="LengtBtn_Click"
+                    Content="Length under 2h"
+                    Cursor="Hand"
+                    FontSize="14"
+                    Foreground="#FFFF9600" />
+            </StackPanel>
+        </Expander>
+        <Label
+            Width="255"
+            Margin="85,26,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Add Movies"
+            FontFamily="OCR A Extended"
+            FontSize="38"
+            Foreground="#FFFF9600" />
+        <Button
+            x:Name="AddMovie_btn"
+            Width="80"
+            Height="40"
+            Margin="149,200,0,210"
+            HorizontalAlignment="Left"
+            Background="#FF7ECC74"
+            Click="AddMovie_btn_Click"
+            Content="Add Movie"
+            Cursor="Hand"
+            FontFamily="OCR A Extended" />
+
+        <Button
+            x:Name="RemoveMovie_btn"
+            Width="100"
+            Height="40"
+            Margin="240,200,0,210"
+            HorizontalAlignment="Left"
+            Background="#FFB54C45"
+            Click="RemoveMovie_btn_Click"
+            Content="Remove Movie"
+            Cursor="Hand"
+            FontFamily="OCR A Extended" />
+
+        <ListBox
+            x:Name="UserMovies_box"
+            Margin="0,250,0,0"
+            d:ItemsSource="{d:SampleData ItemCount=1}"
+            Background="#FF363535"
+            FontFamily="OCR A Extended"
+            FontSize="18"
+            Foreground="#FFFF9600">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Text="{Binding Path=Title}" />
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="17"
+                            FontWeight="SemiBold"
+                            Text="{Binding Path=Genra}" />
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{Binding Path=Description}" />
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Text="{Binding Path=Length, StringFormat={}{0} h}" />
+
+                        <TextBlock
+                            FontFamily="OCR A Extended"
+                            FontSize="17"
+                            FontWeight="DemiBold"
+                            Text="{Binding Path=Rating, StringFormat=Rating: {0}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label
+            Width="125"
+            Margin="0,222,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Your Movies"
+            FontFamily="OCR A Extended"
+            FontSize="17"
+            Foreground="#FF1B9771" />
+        <Label x:Name="Error_label"
+            Width="285"
+            Height="30"
+            Margin="90,130,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="You already have that movie!"
+            FontFamily="OCR A Extended"
+            FontSize="17" Foreground="#FFB54C45"
+            Visibility="Hidden"/>
+    </Grid>
+
+</UserControl>

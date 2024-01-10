@@ -7,7 +7,7 @@ namespace MovieRating
         public MainWindow()
         {
             InitializeComponent();
-            login.SetWindows(register,moviemanager);
+            login.SetWindows(register,moviemanager,moviemenu);
             register.SetLogin(login);
             moviemanager.SetLogin(login);
             

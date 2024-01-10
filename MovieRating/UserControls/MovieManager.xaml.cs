@@ -148,21 +148,5 @@ namespace MovieRating.UserControls
                 e.Handled = true;
             }
         }
-
-        //här läggs sql-kommandon in för att filtrera information om vilka filmer som visas
-        private void RatingO5_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        //här läggs sql-kommandon in för att filtrera information om vilka filmer som visas
-        private void RatingU5_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        //här läggs sql-kommandon in för att filtrera information om vilka filmer som visas
-        private void LengtBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

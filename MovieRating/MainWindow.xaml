@@ -33,7 +33,7 @@
             VerticalAlignment="Center"
             Visibility="Hidden" />
 
-        <!--  Lägger till  -->
+        <!--  Lägger till MovieManager  -->
         <UserControls:MovieManager
             x:Name="moviemanager"
             Grid.RowSpan="3"
@@ -44,6 +44,16 @@
             VerticalAlignment="Center"
             Visibility="Hidden" />
         
+        <!--Lägger till MovieMenu-->
+        <UserControls:MovieMenu
+            x:Name="moviemenu"
+            Grid.RowSpan="3"
+            Grid.Column="1"
+            Width="800"
+            Height="450"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="Hidden" />
     </Grid>
 </Window>
 

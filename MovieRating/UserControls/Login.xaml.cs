@@ -21,6 +21,7 @@ namespace MovieRating.UserControls
     {
         Register register;
         MovieManager movieManager;
+        MovieMenu movieMenu;
         User currentUser = null;
 
         public Login()
@@ -29,10 +30,11 @@ namespace MovieRating.UserControls
         }
 
         //sätter värdet på register
-        public void SetWindows(Register register,MovieManager movieManager)
+        public void SetWindows(Register register,MovieManager movieManager, MovieMenu movieMenu)
         {
             this.movieManager = movieManager;
             this.register = register;
+            this.movieMenu = movieMenu;
         }
 
         
