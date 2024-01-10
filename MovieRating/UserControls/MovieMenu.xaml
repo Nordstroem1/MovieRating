@@ -133,14 +133,14 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Expander
-            Height="115"
-            Margin="0,80,5,0"
+            Height="95"
+            Margin="0,70,398,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             FontFamily="OCR A Extended"
             FontSize="17"
             Foreground="#FFFF9600"
-            Header="Filter">
+            Header="Filter" Grid.ColumnSpan="2">
             <StackPanel Width="130" Height="135">
                 <Button
                     x:Name="FilterAÖ"
@@ -271,6 +271,15 @@
             FontFamily="OCR A Extended"
             FontSize="17" Foreground="#FFB54C45"
             Visibility="Hidden"/>
+        <Button
+            x:Name="CreateMovie_btn"
+            Width="130"
+            Margin="150,165,0,255"
+            HorizontalAlignment="Left"
+            Background="#FF1B9771"
+            Content="Create own movie"
+            Cursor="Hand"
+            FontFamily="OCR A Extended" Click="CreateMovie_btn_Click" />
     </Grid>
 
 </UserControl>

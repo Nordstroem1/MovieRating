@@ -574,7 +574,7 @@
                             FontFamily="OCR A Extended"
                             FontSize="17"
                             FontWeight="DemiBold"
-                            Text="{Binding Path=Rating, StringFormat=Rating: {0}}"/>
+                            Text="{Binding Path=Rating, StringFormat=Rating: {0}}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -737,7 +737,8 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             VerticalContentAlignment="Center"
-            TabIndex="13" PreviewTextInput="Length_box_PreviewTextInput_1" />
+            PreviewTextInput="Length_box_PreviewTextInput_1"
+            TabIndex="13" />
         <Label
             Grid.Row="0"
             Grid.Column="0"
@@ -760,6 +761,19 @@
             Content="Save"
             FontFamily="OCR A Extended"
             Visibility="Hidden" />
+        <Button
+            x:Name="Back_Menu_btn"
+            Width="80"
+            Height="40"
+            Margin="35,390,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="#FF247EA0"
+            Click="Back_Menu_btn_Click"
+            Content="Back"
+            Cursor="Hand"
+            FontFamily="OCR A Extended"
+            TabIndex="16" />
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="470" />

@@ -22,6 +22,7 @@ namespace MovieRating.UserControls
         //nu skaps listan här och i user///
         
         Login login;
+        MovieMenu movieMenu;
         User currentuser = null;
 
 
@@ -35,6 +36,11 @@ namespace MovieRating.UserControls
         public void SetLogin(Login login)
         {
             this.login = login;
+        }
+        //Sätter värdet av Moviemenu.
+        public void SetMovieMenu(MovieMenu movieMenu)
+        {
+            this.movieMenu = movieMenu;
         }
         
         private void Add_btn_Click(object sender, RoutedEventArgs e)
@@ -146,6 +152,16 @@ namespace MovieRating.UserControls
             if (!regex.IsMatch(e.Text))
             {
                 e.Handled = true;
+            }
+        }
+
+        private void Back_Menu_btn_Click(object sender, RoutedEventArgs e)
+        {
+            if(this.Visibility == Visibility.Visible)
+            {
+                movieMenu.Visibility = Visibility.Visible;
+                this.Visibility = Visibility.Hidden;
+                movieMenu.UserMovies_box.Items.Refresh();
             }
         }
     }
