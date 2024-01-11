@@ -54,6 +54,15 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Visibility="Hidden" />
-    </Grid>
+
+        <!--Lägger till RewviewWindow-->
+        <UserControls:ReviewWindow
+            x:Name="reviewwindow"            
+            Width="400"
+            Height="250"
+            Visibility="Hidden"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"/>
+</Grid>
 </Window>
 

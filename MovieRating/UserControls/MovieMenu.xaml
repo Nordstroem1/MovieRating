@@ -191,7 +191,7 @@
             x:Name="AddMovie_btn"
             Width="80"
             Height="40"
-            Margin="149,200,0,210"
+            Margin="131,200,0,210"
             HorizontalAlignment="Left"
             Background="#FF7ECC74"
             Click="AddMovie_btn_Click"
@@ -203,7 +203,7 @@
             x:Name="RemoveMovie_btn"
             Width="100"
             Height="40"
-            Margin="240,200,0,210"
+            Margin="220,200,0,210"
             HorizontalAlignment="Left"
             Background="#FFB54C45"
             Click="RemoveMovie_btn_Click"
@@ -274,12 +274,21 @@
         <Button
             x:Name="CreateMovie_btn"
             Width="130"
-            Margin="150,165,0,255"
+            Margin="130,165,0,255"
             HorizontalAlignment="Left"
             Background="#FF1B9771"
             Content="Create own movie"
             Cursor="Hand"
             FontFamily="OCR A Extended" Click="CreateMovie_btn_Click" />
+        <Button
+            x:Name="Review_btn"
+            Width="53"
+            Margin="267,165,0,255"
+            HorizontalAlignment="Left"
+            Background="#FF7674CC"
+            Content="Review"
+            Cursor="Hand"
+            FontFamily="OCR A Extended" Click="Review_btn_Click" />
     </Grid>
 
 </UserControl>

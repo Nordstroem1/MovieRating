@@ -11,7 +11,8 @@ namespace MovieRating
             register.SetLogin(login);
             moviemanager.SetLogin(login);
             moviemanager.SetMovieMenu(moviemenu);
-            moviemenu.SetWindows(login,moviemanager);
+            moviemenu.SetWindows(login,moviemanager,reviewwindow);
+            reviewwindow.SetMovieMenu(moviemenu);
             
         }
     }

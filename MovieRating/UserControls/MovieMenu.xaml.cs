@@ -24,6 +24,7 @@ namespace MovieRating.UserControls
         User currentuser = null;
         List<Movies> MovieBank = new List<Movies>();
         MovieManager movieManager;
+        ReviewWindow ReviewWindow;
 
         public MovieMenu()
         {
@@ -32,10 +33,11 @@ namespace MovieRating.UserControls
         }
 
         //sättervärdet av login
-        public void SetWindows(Login login, MovieManager movieManager)
+        public void SetWindows(Login login, MovieManager movieManager, ReviewWindow reviewWindow)
         {
             this.login = login;
             this.movieManager = movieManager;
+            this.ReviewWindow = reviewWindow;
         }
         private void AddMovie_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -119,6 +121,19 @@ namespace MovieRating.UserControls
             {
                 movieManager.Visibility = Visibility.Visible;
                 this.Visibility = Visibility.Hidden;
+            }
+        }
+
+
+
+        private void Review_btn_Click(object sender, RoutedEventArgs e)
+        {
+            var chosenMovie = UserMovies_box.SelectedItem;
+
+            if (UserMovies_box.Items.Count > -1||
+                MovieBank_box.Items.Count > -1)
+            {
+                ReviewWindow.Visibility = Visibility.Visible;
             }
         }
     }
