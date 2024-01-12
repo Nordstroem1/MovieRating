@@ -59,3 +59,9 @@ VALUES
 ('The Departed', 'An undercover cop and a mole in the police attempt to identify each other while infiltrating an Irish gang in South Boston.', 'Crime, Drama, Thriller', '2,31', NULL),
 
 ('The Usual Suspects', 'A sole survivor tells of the twisty events leading up to a horrific gun battle on a boat, which began when five criminals met at a seemingly random police lineup.', 'Crime, Mystery, Thriller', '1,46', NULL);
+
+CREATE INDEX genra_idx
+ON movies(genra);
+
+SHOW INDEXES FROM movies;
+

@@ -155,16 +155,15 @@
                     Foreground="#FFFF9600" />
 
                 <Button
-                    x:Name="RatingU5"
+                    x:Name="Drama_movies"
                     Width="130"
                     Height="25"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    Click="RatingU5_Click"
-                    Content="Rating under 5"
+                    Content="Genra: Drama"
                     Cursor="Hand"
                     FontSize="14"
-                    Foreground="#FFFF9600" />
+                    Foreground="#FFFF9600" Click="Drama_movies_Click" />
                 <Button
                     x:Name="LengtBtn"
                     Width="130"
@@ -191,7 +190,7 @@
             x:Name="AddMovie_btn"
             Width="80"
             Height="40"
-            Margin="131,200,0,210"
+            Margin="190,200,0,210"
             HorizontalAlignment="Left"
             Background="#FF7ECC74"
             Click="AddMovie_btn_Click"
@@ -203,7 +202,7 @@
             x:Name="RemoveMovie_btn"
             Width="100"
             Height="40"
-            Margin="220,200,0,210"
+            Margin="279,200,0,210"
             HorizontalAlignment="Left"
             Background="#FFB54C45"
             Click="RemoveMovie_btn_Click"
@@ -274,7 +273,7 @@
         <Button
             x:Name="CreateMovie_btn"
             Width="130"
-            Margin="130,165,0,255"
+            Margin="190,165,0,255"
             HorizontalAlignment="Left"
             Background="#FF1B9771"
             Content="Create own movie"
@@ -283,12 +282,13 @@
         <Button
             x:Name="Review_btn"
             Width="53"
-            Margin="267,165,0,255"
+            Margin="326,165,0,255"
             HorizontalAlignment="Left"
             Background="#FF7674CC"
             Content="Review"
             Cursor="Hand"
             FontFamily="OCR A Extended" Click="Review_btn_Click" />
+        <Button x:Name="Read_review_btn" Content="Read review" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Height="25" Width="70" Background="{x:Null}" Foreground="#FFFF9600" BorderBrush="{x:Null}" Click="Read_review_btn_Click"/>
     </Grid>
 
 </UserControl>

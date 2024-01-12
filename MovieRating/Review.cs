@@ -10,6 +10,7 @@ namespace MovieRating
     {
 
         public int Movie_Id { get; set; }
+        public int Review_Id { get; set; }  
         public string Movie_review { get; set; }
         public DateTime Review_date { get; set; }
 

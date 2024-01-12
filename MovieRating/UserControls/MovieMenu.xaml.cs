@@ -22,14 +22,13 @@ namespace MovieRating.UserControls
     {
         Login login;
         User currentuser = null;
-        List<Movies> MovieBank = new List<Movies>();
+        List<Movies> MovieBankCopy = new List<Movies>();
         MovieManager movieManager;
         ReviewWindow ReviewWindow;
 
         public MovieMenu()
         {
             InitializeComponent();
-            LoadData();
         }
 
         //sättervärdet av login
@@ -46,7 +45,7 @@ namespace MovieRating.UserControls
                 AddMovies();
             }
         }
-
+        
         private void RemoveMovie_btn_Click(object sender, RoutedEventArgs e)
         {
             RemoveMovie();
@@ -89,12 +88,11 @@ namespace MovieRating.UserControls
 
 
         //Läser in datan från databasen
-        private void LoadData()
+        public void LoadData()
         {
-            //
-            //ska fyllas med skrips till databasen
-            //
-            MovieBank_box.ItemsSource = MovieBank;
+            DataBaseConnection db = new DataBaseConnection();
+            MovieBankCopy = db.GetAllMovies();
+            MovieBank_box.ItemsSource = MovieBankCopy;
         }
 
 
@@ -104,7 +102,7 @@ namespace MovieRating.UserControls
             //ska fyllas med skrips till databasen
         }
 
-        private void RatingU5_Click(object sender, RoutedEventArgs e)
+        private void Drama_movies_Click(object sender, RoutedEventArgs e)
         {
             //ska fyllas med skrips till databasen
         }
@@ -113,6 +111,7 @@ namespace MovieRating.UserControls
         {
             //ska fyllas med skrips till databasen
         }
+
 
         //Tar användaren till MovieManager där man kan skapa en obefintlig film
         private void CreateMovie_btn_Click(object sender, RoutedEventArgs e)
@@ -136,5 +135,21 @@ namespace MovieRating.UserControls
                 ReviewWindow.Visibility = Visibility.Visible;
             }
         }
+
+        private void Read_review_btn_Click(object sender, RoutedEventArgs e)
+        {
+            var chosenMovie = UserMovies_box.SelectedItem;
+
+            if (UserMovies_box.Items.Count > -1)
+            {
+                ReviewWindow.Visibility= Visibility.Visible;
+
+                //ReviewWindow.Review_box.Text = 
+                //hur läser jag in rviewen? är de från sql man hittar den filmen med rätt review_id och samma movie_id? hur funkar det? 
+
+            }
+        }
+        
+
     }
 }

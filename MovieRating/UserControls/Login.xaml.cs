@@ -67,7 +67,7 @@ namespace MovieRating.UserControls
                         UserError_label.Visibility = Visibility.Hidden;
                         this.Visibility = Visibility.Hidden;
                         currentUser = user;
-
+                        movieMenu.LoadData();
                         movieMenu.Visibility = Visibility.Visible;
                     }
                     else

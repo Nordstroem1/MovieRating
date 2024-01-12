@@ -156,7 +156,7 @@
             Grid.Column="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Content="Create Rewiw"
+            Content="Review"
             FontFamily="OCR A Extended"
             FontSize="17"
             Foreground="#FFFF9600" />

@@ -19,7 +19,6 @@ namespace MovieRating.UserControls
 {
     public partial class MovieManager : UserControl
     {
-        //nu skaps listan här och i user///
         
         Login login;
         MovieMenu movieMenu;
@@ -74,13 +73,15 @@ namespace MovieRating.UserControls
             {
                 ErrorFeild_label.Visibility = Visibility.Hidden;
 
+                //PROBLEM sätter värdet till 0 varje gång alltså alla filmer man skapar får id =1
+                int id = 0;
                 string title = Title_box.Text;
                 string genra = Genra_box.Text;
                 string description = Description_box.Text;
                 string length = Length_box.Text;
                 string rating = ratingslider.Value.ToString();
 
-                currentuser.MovieList.Add(new Movies(title, genra, description, length, rating));
+                currentuser.MovieList.Add(new Movies(id,title, genra, description, length, rating));
 
                 //sorterar listan, ger listboxen värdet av movielist
                 currentuser.MovieList.Sort((x, y) => y.Rating.CompareTo(x.Rating));

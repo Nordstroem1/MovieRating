@@ -21,17 +21,12 @@ namespace MovieRating.UserControls
     /// </summary>
     public partial class ReviewWindow : UserControl
     {
-        MovieMenu MovieMenu;
+       
         List<Review> ReviewList = new List<Review>();
 
         public ReviewWindow()
         {
             InitializeComponent();
-        }
-
-        public void SetMovieMenu(MovieMenu movieMenu)
-        {
-            this.MovieMenu = movieMenu;
         }
 
         private void Back_btn_Click(object sender, RoutedEventArgs e)
@@ -49,6 +44,7 @@ namespace MovieRating.UserControls
                 ReviewList.Add(newReview);
                 Review_box.Text = "";
 
+                //Ta den valda filmens id, sätt in den när användaren sparar reviewen så att den kopplas till rätt film
                 //sen sql grejs så att det faktiskt läggs till movie_id och DATETIME?
             }   
 
