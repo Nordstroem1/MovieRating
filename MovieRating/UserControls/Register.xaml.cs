@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics.Eventing.Reader;
@@ -25,6 +26,8 @@ namespace MovieRating.UserControls
     {
         Login login;
         bool RegisterOK = false;
+        string name;
+        string password;
         public Register()
         {
             InitializeComponent();
@@ -42,8 +45,8 @@ namespace MovieRating.UserControls
         private void CreateUser()
         {
 
-            string name = User_box.Text;
-            string password = Psw_box.Password;
+            name = User_box.Text;
+            password = Psw_box.Password;
             string repeatPsw = Repeat_Box.Password;
             
             //Användarnamn måste var längre än 5 tecken
@@ -70,6 +73,7 @@ namespace MovieRating.UserControls
                 else
                 {
                     UserList.Add(new User(name, password));
+                    AddUsers();
                     User_box.Clear();
                     Psw_box.Clear();
                     Repeat_Box.Clear();
@@ -96,12 +100,54 @@ namespace MovieRating.UserControls
        
         private void GoBack_btm_Click(object sender, RoutedEventArgs e)
         {
-
-
             this.Visibility = Visibility.Hidden;
             login.Visibility = Visibility.Visible;
 
         }
+
+        
+        private void AddUsers()
+        {
+            string server = "localhost";
+            string database = "MovieRating";
+            string username = "root";
+            string password = "";
+            string connectionString = "";
+
+
+            //ansluter till databasen
+            MySqlConnection connection = new MySqlConnection(connectionString =
+                                                            "SERVER=" + server + ";" +
+                                                            "DATABASE=" + database + ";" +
+                                                            "UID=" + username + ";" +
+                                                            "PASSWORD=" + password + ";");
+
+            connection.Open();
+
+            string query1 = "SELECT COUNT(*) FROM users WHERE username = @username";
+
+            //Kör kommandot "queryn" vi skickade in, i mysql
+            MySqlCommand command = new MySqlCommand(query1, connection);
+
+            //ger Username värdet av inputen som användaren gav
+            command.Parameters.AddWithValue("@username", name);
+
+            //om count är större än 0 så finns användaren registerad.
+            int count = Convert.ToInt32(command.ExecuteNonQuery());
+
+            if(count > 0)
+            {
+                Error_label.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                string query2 = "INSERT INTO Users (user_id, username, PASSWORD) VALUES;";
+            }
+
+            connection.Close();
+        }
+
+
     }
 }
 

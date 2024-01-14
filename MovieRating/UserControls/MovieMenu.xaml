@@ -122,12 +122,6 @@
                             FontSize="16"
                             FontWeight="Bold"
                             Text="{Binding Path=Length, StringFormat={}{0} h}" />
-
-                        <TextBlock
-                            FontFamily="OCR A Extended"
-                            FontSize="17"
-                            FontWeight="DemiBold"
-                            Text="{Binding Path=Rating, StringFormat=Rating: {0}}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -241,12 +235,6 @@
                             FontSize="16"
                             FontWeight="Bold"
                             Text="{Binding Path=Length, StringFormat={}{0} h}" />
-
-                        <TextBlock
-                            FontFamily="OCR A Extended"
-                            FontSize="17"
-                            FontWeight="DemiBold"
-                            Text="{Binding Path=Rating, StringFormat=Rating: {0}}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

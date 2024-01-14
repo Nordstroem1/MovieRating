@@ -63,6 +63,6 @@
             Visibility="Hidden"
             VerticalAlignment="Center"
             HorizontalAlignment="Center"/>
-</Grid>
+    </Grid>
 </Window>
 

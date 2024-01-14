@@ -569,12 +569,6 @@
                             FontSize="16"
                             FontWeight="Bold"
                             Text="{Binding Path=Length, StringFormat={}{0} h}" />
-
-                        <TextBlock
-                            FontFamily="OCR A Extended"
-                            FontSize="17"
-                            FontWeight="DemiBold"
-                            Text="{Binding Path=Rating, StringFormat=Rating: {0}}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -650,42 +644,11 @@
             FontFamily="OCR A Extended"
             FontSize="35"
             Foreground="#FFFF9600" />
-        <Label
-            Grid.Row="0"
-            Grid.Column="0"
-            Height="35"
-            Margin="125,330,270,85"
-            Content="Rating"
-            FontFamily="OCR A Extended"
-            FontSize="18"
-            Foreground="#FFFF9600" />
-
-        <Label
-            Grid.Column="0"
-            Width="35"
-            Height="25"
-            Margin="330,320,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Content="{Binding ElementName=ratingslider, Path=Value}"
-            FontFamily="OCR A Extended"
-            FontSize="14"
-            Foreground="#FFFF9600" />
-        <Slider
-            x:Name="ratingslider"
-            Width="250"
-            Margin="0,340,10,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            IsSnapToTickEnabled="True"
-            Maximum="10"
-            Minimum="1"
-            TabIndex="14" />
         <Button
             x:Name="Add_btn"
             Width="80"
             Height="40"
-            Margin="373,372,0,38"
+            Margin="363,390,0,20"
             HorizontalAlignment="Left"
             Background="#FF7ECC74"
             Click="Add_btn_Click"
@@ -697,8 +660,8 @@
             x:Name="Remove_btn"
             Width="80"
             Height="40"
-            Margin="0,372,0,0"
-            HorizontalAlignment="Center"
+            Margin="185,390,0,0"
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="#FFB54C45"
             Click="Remove_btn_Click"
@@ -710,7 +673,7 @@
             x:Name="Edit_btn"
             Width="80"
             Height="40"
-            Margin="285,372,105,38"
+            Margin="275,390,115,20"
             Background="#FF247EA0"
             Click="Edit_btn_Click"
             Content="Edit"

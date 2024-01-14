@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using MovieRating.UserControls;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,6 @@ namespace MovieRating
         string password = "";
         string connectionString = "";
 
-        List<User> UserBank = new List<User>();
         List<Review> ReviewBank = new List<Review>();
 
         public DataBaseConnection()
@@ -51,8 +51,7 @@ namespace MovieRating
                                            (string)reader["title"],     
                                            (string)reader["genra"], 
                                            (string)reader["description"], 
-                                           (string)reader["length"], 
-                                           reader["rating"] == DBNull.Value ? null : (string)reader["rating"]);
+                                           (string)reader["length"]);
 
                 MovieBank.Add(movies);
             }
@@ -60,6 +59,5 @@ namespace MovieRating
 
             return MovieBank;
         }
-
     }
 }

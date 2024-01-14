@@ -79,12 +79,9 @@ namespace MovieRating.UserControls
                 string genra = Genra_box.Text;
                 string description = Description_box.Text;
                 string length = Length_box.Text;
-                string rating = ratingslider.Value.ToString();
 
-                currentuser.MovieList.Add(new Movies(id,title, genra, description, length, rating));
+                currentuser.MovieList.Add(new Movies(id,title, genra, description, length));
 
-                //sorterar listan, ger listboxen värdet av movielist
-                currentuser.MovieList.Sort((x, y) => y.Rating.CompareTo(x.Rating));
 
                 Movie_box.ItemsSource = currentuser.MovieList;
                 Movie_box.Items.Refresh();
@@ -93,7 +90,6 @@ namespace MovieRating.UserControls
                 Genra_box.Clear();
                 Description_box.Clear();
                 Length_box.Clear();
-                ratingslider.Value = 0;
             }
             else
             {
@@ -109,13 +105,11 @@ namespace MovieRating.UserControls
                 Save_btn.Visibility = Visibility.Visible;
 
                 var EditItem = Movie_box.SelectedItem;
-                string slider = ratingslider.Value.ToString();
 
                 Title_box.Text = ((Movies)EditItem).Title;
                 Genra_box.Text = ((Movies)EditItem).Genra;
                 Description_box.Text = ((Movies)EditItem).Description;
                 Length_box.Text = ((Movies)EditItem).Length;
-                slider = ((Movies)EditItem).Rating;
             }
         }
 
@@ -131,7 +125,6 @@ namespace MovieRating.UserControls
                 currentuser.MovieList[index].Genra = Genra_box.Text;
                 currentuser.MovieList[index].Description = Description_box.Text;
                 currentuser.MovieList[index].Length = $"{Length_box.Text} h";
-                currentuser.MovieList[index].Rating = $"Rating: {ratingslider.Value}";
 
                 Movie_box.Items.Refresh();
                 Save_btn.Visibility = Visibility.Hidden;
@@ -140,7 +133,6 @@ namespace MovieRating.UserControls
                 Genra_box.Text = "";
                 Description_box.Text = "";
                 Length_box.Text = "";
-                ratingslider.Value = 0;
             }
         }
 
