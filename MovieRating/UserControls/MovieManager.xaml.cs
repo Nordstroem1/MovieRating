@@ -64,7 +64,7 @@ namespace MovieRating.UserControls
         private void AddMovies()
         {
             //funkar detta?????+ verkar så när jag debuggar???? smidigare sätt????
-            currentuser = login.GetLogedInUser();
+            currentuser = login.GetCurrentUserLogin();
             
             if (Title_box.Text != "" &&
             Genra_box.Text != "" &&
@@ -73,17 +73,18 @@ namespace MovieRating.UserControls
             {
                 ErrorFeild_label.Visibility = Visibility.Hidden;
 
-                //PROBLEM sätter värdet till 0 varje gång alltså alla filmer man skapar får id =1
                 int id = 0;
                 string title = Title_box.Text;
                 string genra = Genra_box.Text;
                 string description = Description_box.Text;
                 string length = Length_box.Text;
+                
+                foreach(Movies movie in movieMenu.MovieBankCopy)
+                {
+                    if (movie.Id >= id) { id = movie.Id + 1; }
+                }
+                currentuser.MovieList.Add(new Movies(id, title, genra, description, length));
 
-                currentuser.MovieList.Add(new Movies(id,title, genra, description, length));
-
-
-                Movie_box.ItemsSource = currentuser.MovieList;
                 Movie_box.Items.Refresh();
 
                 Title_box.Clear();
@@ -116,6 +117,7 @@ namespace MovieRating.UserControls
         //Får värdet av valda objektet i listboxen, sedan uppdaterad listan & listboxen.
         private void Save_btn_Click(object sender, RoutedEventArgs e)
         {
+            currentuser = login.GetCurrentUserLogin();
             var selecteditem = Movie_box.SelectedItem;
             int index = currentuser.MovieList.IndexOf((Movies)selecteditem);
 

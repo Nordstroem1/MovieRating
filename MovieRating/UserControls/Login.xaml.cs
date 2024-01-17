@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace MovieRating.UserControls
 {
@@ -57,34 +59,70 @@ namespace MovieRating.UserControls
         //Om inte -> errorMeddelande.
         private void LoginUser()
         {
-            if (register.UserList.Count >0)
+            register.GetUserFromDb();
+            if (CheckUsers())
             {
-                foreach (User user in register.UserList)
-                {
-                    if (Username_box.Text.ToLower() == user.UserName.ToLower() &&
-                       Password_box.Password == user.Password)
-                    {
-                        UserError_label.Visibility = Visibility.Hidden;
-                        this.Visibility = Visibility.Hidden;
-                        currentUser = user;
-                        movieMenu.LoadData();
-                        movieMenu.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        Password_box.Clear();
-                        UserError_label.Visibility= Visibility.Visible;
-                    }
-                }
+                UserError_label.Visibility = Visibility.Hidden;
+                this.Visibility = Visibility.Hidden;
+                currentUser = GetCurrentUserLogin();
+                movieMenu.Visibility = Visibility.Visible;
+                movieMenu.LoadMoviesFromDB();
             }
             else
             {
+                Password_box.Clear();
                 UserError_label.Visibility = Visibility.Visible;
             }
+            
         }
-        //Ger tillgång till den inloggade användaren till resten av programmet
-        public User GetLogedInUser()
+        
+        //Kollar om användaren med lösenord finns i databasenm om det gör det = true
+        private bool CheckUsers()
         {
+            string server = "localhost";
+            string database = "MovieRating";
+            string username = "root";
+            string password = "Ktmpappa#27";
+            string connectionString = "";
+
+            MySqlConnection connection = new MySqlConnection(connectionString =
+                                                            "SERVER=" + server + ";" +
+                                                            "DATABASE=" + database + ";" +
+                                                            "UID=" + username + ";" +
+                                                            "PASSWORD=" + password + ";");
+
+            connection.Open();            
+            
+            string query = "SELECT * FROM users WHERE username = @username AND password = @password;";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@username", Username_box.Text);
+            command.Parameters.AddWithValue("@password", Password_box.Password);
+
+            MySqlDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        
+       // hämtar den inloggade användaren
+        public User GetCurrentUserLogin()
+        {
+            foreach(User user in register.UserList)
+            {
+                if(Username_box.Text == user.UserName)
+                {
+                    currentUser = user;
+                }
+            }
             return currentUser;
         }
     }

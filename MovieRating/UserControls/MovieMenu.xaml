@@ -127,6 +127,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Expander
+            Grid.ColumnSpan="2"
             Height="95"
             Margin="0,70,398,0"
             HorizontalAlignment="Right"
@@ -134,19 +135,18 @@
             FontFamily="OCR A Extended"
             FontSize="17"
             Foreground="#FFFF9600"
-            Header="Filter" Grid.ColumnSpan="2">
+            Header="Filter">
             <StackPanel Width="130" Height="135">
                 <Button
-                    x:Name="FilterAÖ"
+                    x:Name="Reset"
                     Width="130"
                     Height="25"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    Click="FilterAÖ_Click"
-                    Content="Title A-Ö"
+                    Content="Reset"
                     Cursor="Hand"
                     FontSize="14"
-                    Foreground="#FFFF9600" />
+                    Foreground="#FFFF9600" Click="Reset_Click" />
 
                 <Button
                     x:Name="Drama_movies"
@@ -154,10 +154,11 @@
                     Height="25"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
+                    Click="Drama_movies_Click"
                     Content="Genra: Drama"
                     Cursor="Hand"
                     FontSize="14"
-                    Foreground="#FFFF9600" Click="Drama_movies_Click" />
+                    Foreground="#FFFF9600" />
                 <Button
                     x:Name="LengtBtn"
                     Width="130"
@@ -165,7 +166,7 @@
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
                     Click="LengtBtn_Click"
-                    Content="Length under 2h"
+                    Content="Length"
                     Cursor="Hand"
                     FontSize="14"
                     Foreground="#FFFF9600" />
@@ -248,7 +249,8 @@
             FontFamily="OCR A Extended"
             FontSize="17"
             Foreground="#FF1B9771" />
-        <Label x:Name="Error_label"
+        <Label
+            x:Name="Error_label"
             Width="285"
             Height="30"
             Margin="90,130,0,0"
@@ -256,27 +258,41 @@
             VerticalAlignment="Top"
             Content="You already have that movie!"
             FontFamily="OCR A Extended"
-            FontSize="17" Foreground="#FFB54C45"
-            Visibility="Hidden"/>
+            FontSize="17"
+            Foreground="#FFB54C45"
+            Visibility="Hidden" />
         <Button
             x:Name="CreateMovie_btn"
             Width="130"
             Margin="190,165,0,255"
             HorizontalAlignment="Left"
             Background="#FF1B9771"
+            Click="CreateMovie_btn_Click"
             Content="Create own movie"
             Cursor="Hand"
-            FontFamily="OCR A Extended" Click="CreateMovie_btn_Click" />
+            FontFamily="OCR A Extended" />
         <Button
             x:Name="Review_btn"
             Width="53"
             Margin="326,165,0,255"
             HorizontalAlignment="Left"
             Background="#FF7674CC"
+            Click="Review_btn_Click"
             Content="Review"
             Cursor="Hand"
-            FontFamily="OCR A Extended" Click="Review_btn_Click" />
-        <Button x:Name="Read_review_btn" Content="Read review" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Height="25" Width="70" Background="{x:Null}" Foreground="#FFFF9600" BorderBrush="{x:Null}" Click="Read_review_btn_Click"/>
+            FontFamily="OCR A Extended" />
+        <Button
+            x:Name="Read_review_btn"
+            Width="70"
+            Height="25"
+            Margin="10,195,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="{x:Null}"
+            BorderBrush="{x:Null}"
+            Click="Read_review_btn_Click"
+            Content="Read review"
+            Foreground="#FFFF9600" />
     </Grid>
 
 </UserControl>

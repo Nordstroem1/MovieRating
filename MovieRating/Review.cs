@@ -18,6 +18,5 @@ namespace MovieRating
         {
             Movie_review = movie_review;
         }
-
     }
 }

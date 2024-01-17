@@ -13,7 +13,7 @@ namespace MovieRating
         public string Genra { get; set; }
         public string Length { get; set; }
         public int Id {  get; set; }
-        public int NextId = 0;
+        public int NextId { get; set; }
 
 
         public Movies(int id, string title, string genra, string description, string length)

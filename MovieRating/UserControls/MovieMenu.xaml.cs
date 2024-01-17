@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace MovieRating.UserControls
 {
@@ -21,10 +23,17 @@ namespace MovieRating.UserControls
     public partial class MovieMenu : UserControl
     {
         Login login;
-        User currentuser = null;
-        List<Movies> MovieBankCopy = new List<Movies>();
+        User currentuser;
+        public List<Movies> MovieBankCopy = new List<Movies>();
         MovieManager movieManager;
         ReviewWindow ReviewWindow;
+       
+        string server = "localhost";
+        string database = "MovieRating";
+        string username = "root";
+        string password = "";
+        string connectionString = "";
+
 
         public MovieMenu()
         {
@@ -55,15 +64,13 @@ namespace MovieRating.UserControls
         //Om inte filmen redan finns i listan.
         private void AddMovies()
         {
-            currentuser = login.GetLogedInUser();
+            currentuser = login.GetCurrentUserLogin();
             var EditItem = MovieBank_box.SelectedItem;
 
-            if (MovieBank_box.Items.Count > -1 && 
-                !UserMovies_box.SelectedItems.Contains(EditItem))
+            if (!currentuser.MovieList.Contains(EditItem))
             {
-                Error_label.Visibility = Visibility.Visible;
                 currentuser.MovieList.Add((Movies)EditItem);
-
+                AddMoviesToDb();
                 UserMovies_box.ItemsSource = currentuser.MovieList;
                 UserMovies_box.Items.Refresh();
             }
@@ -73,10 +80,54 @@ namespace MovieRating.UserControls
             }
         }
 
+        //Lägg till kopplingen där man anger vilken film som tillhör vem.
+        private void AddMoviesToDb()
+        {
+
+            //
+            //
+            //
+            //
+            //Problem: Säger att man försöker lägga till duplicerade primary keys i Linktablet..
+            currentuser = login.GetCurrentUserLogin();
+            var EditItem = MovieBank_box.SelectedItem;
+            server = "localhost";
+            database = "MovieRating";
+            username = "root";
+            password = "Ktmpappa#27";
+            connectionString = "";
+
+
+
+            //ansluter till databasen
+            MySqlConnection connection = new MySqlConnection(connectionString =
+                                                            "SERVER=" + server + ";" +
+                                                            "DATABASE=" + database + ";" +
+                                                            "UID=" + username + ";" +
+                                                            "PASSWORD=" + password + ";");
+
+            connection.Open();
+            int user_id = currentuser.Id;
+            int movie_id = ((Movies)EditItem).Id;
+
+            string query = "INSERT INTO user_movies_lt(user_id, movie_id) VALUES(@user_id, @movie_id);";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@movie_id", movie_id);
+            command.Parameters.AddWithValue("@user_id", user_id);
+
+
+            //crashar///////
+            command.ExecuteNonQuery();
+            connection.Close();
+
+        }
+
         //Tar bort valda indexet i listboxen av filmer använadren samlat ihop
         private void RemoveMovie()
         {
-            currentuser = login.GetLogedInUser();
+            currentuser = login.GetCurrentUserLogin();
             var EditItem = UserMovies_box.SelectedItem;
 
             if (UserMovies_box.Items.Count > -1)
@@ -88,36 +139,92 @@ namespace MovieRating.UserControls
 
 
         //Läser in datan från databasen
-        public void LoadData()
+        public void LoadMoviesFromDB()
         {
+            currentuser = login.GetCurrentUserLogin();
             DataBaseConnection db = new DataBaseConnection();
-            MovieBankCopy = db.GetAllMovies();
-            MovieBank_box.ItemsSource = MovieBankCopy;
+            currentuser.MovieList = db.GiveMoviesToUser();
+            UserMovies_box.ItemsSource = currentuser.MovieList;
+            MovieBank_box.ItemsSource = db.GetAllMovies();
         }
 
-
-
-        private void FilterAÖ_Click(object sender, RoutedEventArgs e)
-        {
-            //ska fyllas med skrips till databasen
-        }
 
         private void Drama_movies_Click(object sender, RoutedEventArgs e)
         {
-            //ska fyllas med skrips till databasen
+            Dictionary<int, Movies> DramaDic = new Dictionary<int, Movies>();
+
+            MySqlConnection connection = new MySqlConnection(connectionString =
+                                                            "SERVER=" + server + ";" +
+                                                            "DATABASE=" + database + ";" +
+                                                            "UID=" + username + ";" +
+                                                            "PASSWORD=" + password + ";");
+
+            connection.Open();
+
+            string query = "SELECT * FROM movies WHERE genra LIKE '%Drama%';";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Movies movie = new Movies((int)reader["movie_id"],
+                                          (string)reader["title"],
+                                          (string)reader["genra"],
+                                          (string)reader["description"],
+                                          (string)reader["length"]);
+
+                DramaDic.Add((int)reader["movie_id"], movie);
+            }
+
+            MovieBank_box.ItemsSource = DramaDic.Values;
+            connection.Close();
         }
 
         private void LengtBtn_Click(object sender, RoutedEventArgs e)
         {
-            //ska fyllas med skrips till databasen
+            Dictionary<int, Movies> LengthDic = new Dictionary<int, Movies>();
+
+            MySqlConnection connection = new MySqlConnection(connectionString =
+                                                            "SERVER=" + server + ";" +
+                                                            "DATABASE=" + database + ";" +
+                                                            "UID=" + username + ";" +
+                                                            "PASSWORD=" + password + ";");
+
+            connection.Open();
+
+            string query = "SELECT * FROM movies ORDER BY length ASC";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Movies movie = new Movies((int)reader["movie_id"],
+                                          (string)reader["title"],
+                                          (string)reader["genra"],
+                                          (string)reader["description"],
+                                          (string)reader["length"]);
+
+                LengthDic.Add((int)reader["movie_id"], movie);
+            }
+
+            MovieBank_box.ItemsSource = LengthDic.Values;
+            connection.Close();
         }
 
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            DataBaseConnection db = new DataBaseConnection();
+            MovieBank_box.ItemsSource = db.GetAllMovies();
+        }
 
         //Tar användaren till MovieManager där man kan skapa en obefintlig film
         private void CreateMovie_btn_Click(object sender, RoutedEventArgs e)
         {
             if(this.Visibility == Visibility.Visible)
             {
+                movieManager.Movie_box.ItemsSource = currentuser.MovieList;
                 movieManager.Visibility = Visibility.Visible;
                 this.Visibility = Visibility.Hidden;
             }
@@ -149,7 +256,7 @@ namespace MovieRating.UserControls
 
             }
         }
-        
 
+        
     }
 }

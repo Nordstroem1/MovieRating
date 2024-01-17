@@ -25,15 +25,19 @@ namespace MovieRating.UserControls
     public partial class Register : UserControl
     {
         Login login;
+        public List<User> UserList = new List<User>();
+
         bool RegisterOK = false;
         string name;
-        string password;
+        string user_password;
+
+        
         public Register()
         {
             InitializeComponent();
         }
 
-        public List<User> UserList = new List<User>();
+        
 
         //sätter värdet på Login.
         public void SetLogin(Login login)
@@ -46,9 +50,9 @@ namespace MovieRating.UserControls
         {
 
             name = User_box.Text;
-            password = Psw_box.Password;
+            user_password = Psw_box.Password;
             string repeatPsw = Repeat_Box.Password;
-            
+
             //Användarnamn måste var längre än 5 tecken
             Regex regex = new Regex(@"^[a-zA-Z0-9]{6,}$");
 
@@ -66,14 +70,14 @@ namespace MovieRating.UserControls
                     }
                 }
 
-                if (password.ToLower() != repeatPsw.ToLower())
+                if (user_password.ToLower() != repeatPsw.ToLower())
                 {
                     Password_label.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    UserList.Add(new User(name, password));
-                    AddUsers();
+                    UserList.Add(new User(name, user_password));
+                    AddUsersToDB();
                     User_box.Clear();
                     Psw_box.Clear();
                     Repeat_Box.Clear();
@@ -85,7 +89,7 @@ namespace MovieRating.UserControls
                 RegisterOK = false;
             }
         }
-        
+
         //om regexen är korrekt kommer användaren till Login annars är den kvar.
         private void Register_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -97,7 +101,7 @@ namespace MovieRating.UserControls
             }
         }
 
-       
+
         private void GoBack_btm_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
@@ -105,8 +109,8 @@ namespace MovieRating.UserControls
 
         }
 
-        
-        private void AddUsers()
+
+        private void AddUsersToDB()
         {
             string server = "localhost";
             string database = "MovieRating";
@@ -124,7 +128,7 @@ namespace MovieRating.UserControls
 
             connection.Open();
 
-            string query1 = "SELECT COUNT(*) FROM users WHERE username = @username";
+            string query1 = "SELECT COUNT(*) FROM users WHERE username = @username;";
 
             //Kör kommandot "queryn" vi skickade in, i mysql
             MySqlCommand command = new MySqlCommand(query1, connection);
@@ -135,18 +139,55 @@ namespace MovieRating.UserControls
             //om count är större än 0 så finns användaren registerad.
             int count = Convert.ToInt32(command.ExecuteNonQuery());
 
-            if(count > 0)
+            if (count > 0)
             {
                 Error_label.Visibility = Visibility.Visible;
             }
             else
             {
-                string query2 = "INSERT INTO Users (user_id, username, PASSWORD) VALUES;";
+                command.Parameters.AddWithValue("@PASSWORD", user_password);
+                //insert_user = stored procedure
+                string query2 = "CALL insert_user(@username,@PASSWORD);";
+                command.CommandText = query2;
+                command.ExecuteNonQuery();
             }
-
             connection.Close();
         }
 
+        //hämtar alla användare från Databasen.
+        public void GetUserFromDb()
+        {
+            string server = "localhost";
+            string database = "MovieRating";
+            string username = "root";
+            string password = "Ktmpappa#27";
+            string connectionString = "";
+
+            MySqlConnection connection = new MySqlConnection(connectionString =
+                                                            "SERVER=" + server + ";" +
+                                                            "DATABASE=" + database + ";" +
+                                                            "UID=" + username + ";" +
+                                                            "PASSWORD=" + password + ";");
+
+            connection.Open();
+
+            string query1 = "SELECT * FROM users;";
+            
+            MySqlCommand command = new MySqlCommand(query1, connection);
+
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                if (!UserList.Contains(reader["username"]))
+                {
+                    User user = new User((string)reader["username"],
+                                    (string)reader["PASSWORD"]);
+
+                    UserList.Add(user);
+                }
+            }
+        }
 
     }
 }
