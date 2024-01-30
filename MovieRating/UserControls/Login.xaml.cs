@@ -82,7 +82,7 @@ namespace MovieRating.UserControls
             string server = "localhost";
             string database = "MovieRating";
             string username = "root";
-            string password = "Ktmpappa#27";
+            string password = "";
             string connectionString = "";
 
             MySqlConnection connection = new MySqlConnection(connectionString =

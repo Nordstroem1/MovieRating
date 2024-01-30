@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -16,17 +17,24 @@ using System.Windows.Shapes;
 
 namespace MovieRating.UserControls
 {
-    /// <summary>
-    /// Interaction logic for ReviewWindow.xaml
-    /// </summary>
     public partial class ReviewWindow : UserControl
     {
-       
-        List<Review> ReviewList = new List<Review>();
+        MovieMenu movieMenu;
+
+        string server = "localhost";
+        string database = "MovieRating";
+        string username = "root";
+        string password = "";
+        string connectionString = "";
 
         public ReviewWindow()
         {
             InitializeComponent();
+        }
+
+        public void SetMovieMenu(MovieMenu movieMenu)
+        {
+            this.movieMenu = movieMenu;
         }
 
         private void Back_btn_Click(object sender, RoutedEventArgs e)
@@ -34,20 +42,82 @@ namespace MovieRating.UserControls
             this.Visibility = Visibility.Hidden;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Add_Btn_Click(object sender, RoutedEventArgs e)
         {
             string review = null;
-            if (Review_box.Text != "")
+            Movies movie = movieMenu.GetChosenMovie();
+            int movie_id = movie.Id;
+            DateTime date = DateTime.Now;
+
+
+            if (Create_review_box.Text != "")
             {
-                review = Review_box.Text;
-                Review newReview = new Review(review);
-                ReviewList.Add(newReview);
-                Review_box.Text = "";
+                review = Create_review_box.Text + "\n";
+                Review newReview = new Review(movie_id, review);
+                Create_review_box.Text = "";
 
-                //Ta den valda filmens id, sätt in den när användaren sparar reviewen så att den kopplas till rätt film
-                //sen sql grejs så att det faktiskt läggs till movie_id och DATETIME?
-            }   
+                MySqlConnection connection = new MySqlConnection(connectionString =
+                                                           "SERVER=" + server + ";" +
+                                                           "DATABASE=" + database + ";" +
+                                                           "UID=" + username + ";" +
+                                                           "PASSWORD=" + password + ";");
 
+                connection.Open();
+
+                string query = "INSERT INTO review(movie_id, review_date, user_review) VALUES(@movie_id, @review_date, @user_review);";
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@user_review", review);
+                command.Parameters.AddWithValue("@review_date", date);
+                command.Parameters.AddWithValue("@movie_id", movie_id);
+
+                command.ExecuteNonQuery();
+                Create_review_box.Clear();
+                connection.Close();
+            }
+            this.Visibility = Visibility.Hidden;
         }
+
+        //hämtar alla reviews som tillhör rätt film från Databasen, retunerar en listan till review window!
+        public List<Review> GetReviews()
+        {
+            List<Review> reviewList = new List<Review>();
+            Movies chosenMovie = movieMenu.GetChosenMovie();
+            int movie_id = chosenMovie.Id;
+            int review_id = 0;
+
+            MySqlConnection connection = new MySqlConnection(connectionString =
+                                                           "SERVER=" + server + ";" +
+                                                           "DATABASE=" + database + ";" +
+                                                           "UID=" + username + ";" +
+                                                           "PASSWORD=" + password + ";");
+            connection.Open();
+
+            string query = "SELECT * FROM review WHERE movie_id = @movie_id;";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@movie_id", movie_id);
+            command.Parameters.AddWithValue("@review_id", review_id);
+            MySqlDataReader reader = command.ExecuteReader();
+
+            //Lägger till reviewn om den inte redan existerar
+            while (reader.Read())
+            {
+                Review review = new Review((int)reader["review_id"], (string)reader["user_review"]);
+
+                if (!chosenMovie.ReviewDic.ContainsKey(review.Review_Id))
+                {
+                    chosenMovie.ReviewDic.Add(review.Review_Id, review);
+                }
+            }
+
+            foreach (Review review in chosenMovie.ReviewDic.Values)
+            {
+                reviewList.Add(review);
+            }
+            connection.Close();
+            return reviewList;
+        }
+
     }
-}
+} 

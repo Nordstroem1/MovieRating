@@ -67,11 +67,13 @@ namespace MovieRating
                 //om usern inte finns i dictionaryn, skapa den
                 if (!userDic.ContainsKey(user_id))
                 {
-                    User user = new User((string)reader["username"], 
+                    User user = new User((int)reader["user_id"],
+                                        (string)reader["username"], 
                                         (string)reader["PASSWORD"]);
 
                     userDic.Add((int)reader["user_id"], user);
                 }
+                //Ger rätt film till rätt användare.
                 userDic[user_id].MovieList.Add(UserMovieDic[movie_id]);
             }
 
@@ -118,7 +120,6 @@ namespace MovieRating
             {
                 MovieBank.Add(movie);
             }
-
             connection.Close();
             return MovieBank;
         }

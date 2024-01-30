@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="250"
     d:DesignWidth="400"
-    Background="#FF363535"
+    BorderBrush="#FFFAFAFA"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="GridStyle1" TargetType="{x:Type Grid}" />
@@ -138,56 +138,128 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <SolidColorBrush x:Key="ListBox.Static.Background" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="ListBox.Static.Border" Color="#FFABADB3" />
+        <SolidColorBrush x:Key="ListBox.Disabled.Background" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="ListBox.Disabled.Border" Color="#FFD9D9D9" />
+        <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="{StaticResource ListBox.Static.Background}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ListBox.Static.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+            <Setter Property="ScrollViewer.PanningMode" Value="Both" />
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border
+                            x:Name="Bd"
+                            Padding="1"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10"
+                            SnapsToDevicePixels="true">
+                            <ScrollViewer Padding="{TemplateBinding Padding}" Focusable="false">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource ListBox.Disabled.Background}" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource ListBox.Disabled.Border}" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsGrouping" Value="true" />
+                                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="GridStyle2" TargetType="{x:Type Grid}" />
+        <Style x:Key="GridStyle3" TargetType="{x:Type Grid}" />
     </UserControl.Resources>
-    <Grid Background="#FF363535">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <Border
+        Background="#FF363535"
+        BorderBrush="White"
+        BorderThickness="0.8"
+        CornerRadius="10,10,10,10">
+        <Grid Style="{DynamicResource GridStyle3}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,22,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Content="Review"
+                FontFamily="OCR A Extended"
+                FontSize="17"
+                Foreground="#FFFF9600" />
 
-        <Label
-            Grid.Row="0"
-            Grid.Column="1"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Content="Review"
-            FontFamily="OCR A Extended"
-            FontSize="17"
-            Foreground="#FFFF9600" />
-        <TextBox
-            x:Name="Review_box"
-            Grid.Row="1"
-            Grid.Column="1"
-            Width="190"
-            Margin="5,58,5,8"
-            VerticalContentAlignment="Center" />
-        <Button
-            Grid.Row="2"
-            Grid.Column="2"
-            Width="60"
-            Height="30"
-            Margin="0,8,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Click="Button_Click"
-            Content="Add"
-            FontFamily="OCR A Extended" />
-        <Button
-            x:Name="Back_btn"
-            Grid.Row="2"
-            Width="60"
-            Height="29"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Click="Back_btn_Click"
-            Content="Back"
-            FontFamily="OCR A Extended"
-            RenderTransformOrigin="0,0.025" />
-    </Grid>
+            <ListBox
+                x:Name="Review_box"
+                Grid.Column="1"
+                Width="200"
+                Margin="0,100,0,55"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Bottom"
+                FontFamily="OCR A Extended"
+                Style="{DynamicResource ListBoxStyle1}" />
+            <Button
+                x:Name="Add_Btn"
+                Grid.Column="2"
+                Width="60"
+                Height="30"
+                Margin="0,205,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Click="Add_Btn_Click"
+                Content="Add"
+                FontFamily="OCR A Extended" />
+            <Button
+                x:Name="Back_btn"
+                Width="60"
+                Height="29"
+                Margin="0,210,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Click="Back_btn_Click"
+                Content="Back"
+                FontFamily="OCR A Extended"
+                RenderTransformOrigin="0,0.025" />
+
+            <TextBox
+                x:Name="Create_review_box"
+                Grid.Column="1"
+                Width="190"
+                Height="30"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                TextWrapping="Wrap" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="54,70,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Content="Old Reviews"
+                FontFamily="OCR A Extended"
+                FontSize="13"
+                Foreground="#FFFF9600" />
+        </Grid>
+    </Border>
 </UserControl>

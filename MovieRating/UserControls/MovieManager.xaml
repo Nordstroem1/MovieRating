@@ -716,14 +716,14 @@
             x:Name="Save_btn"
             Width="90"
             Height="20"
-            Margin="280,420,0,0"
+            Margin="275,360,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="#FF247EA0"
             Click="Save_btn_Click"
             Content="Save"
             FontFamily="OCR A Extended"
-            Visibility="Hidden" />
+            Visibility="Hidden"/>
         <Button
             x:Name="Back_Menu_btn"
             Width="80"

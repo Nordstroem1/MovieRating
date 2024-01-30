@@ -268,7 +268,7 @@
             HorizontalAlignment="Left"
             Background="#FF1B9771"
             Click="CreateMovie_btn_Click"
-            Content="Create own movie"
+            Content="Create/Edit"
             Cursor="Hand"
             FontFamily="OCR A Extended" />
         <Button

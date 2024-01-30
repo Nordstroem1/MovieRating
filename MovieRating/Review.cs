@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace MovieRating
 {
-    class Review
+    public class Review
     {
 
-        public int Movie_Id { get; set; }
         public int Review_Id { get; set; }  
         public string Movie_review { get; set; }
         public DateTime Review_date { get; set; }
 
-        public Review(string movie_review)
+        public Review(int id, string movie_review)
         {
+            Review_Id = id;
             Movie_review = movie_review;
+            Review_date = DateTime.Now;
         }
     }
 }

@@ -81,8 +81,6 @@ BEGIN
 END$$
 DELIMITER ;
 
-SELECT * FROM users;
-
 SET sql_safe_updates = 1;
 
 CREATE VIEW user_movies AS
@@ -91,4 +89,7 @@ FROM Users
 JOIN user_movie_lt ON Users.user_id = user_movie_lt.user_id
 JOIN movies ON movies.movie_id = user_movie_lt.movie_id;
 
-SELECT * FROM user_movies;
+SELECT * FROM user_movies_lt;
+SELECT * FROM users;
+SELECT * FROM movies;
+

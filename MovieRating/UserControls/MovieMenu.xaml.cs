@@ -24,6 +24,7 @@ namespace MovieRating.UserControls
     {
         Login login;
         User currentuser;
+        Movies chosenMovie;
         public List<Movies> MovieBankCopy = new List<Movies>();
         MovieManager movieManager;
         ReviewWindow ReviewWindow;
@@ -83,45 +84,32 @@ namespace MovieRating.UserControls
         //Lägg till kopplingen där man anger vilken film som tillhör vem.
         private void AddMoviesToDb()
         {
-
-            //
-            //
-            //
-            //
-            //Problem: Säger att man försöker lägga till duplicerade primary keys i Linktablet..
             currentuser = login.GetCurrentUserLogin();
             var EditItem = MovieBank_box.SelectedItem;
-            server = "localhost";
-            database = "MovieRating";
-            username = "root";
-            password = "Ktmpappa#27";
-            connectionString = "";
 
+            if (!UserMovies_box.Items.Contains(chosenMovie))
+            {
+                //ansluter till databasen
+                MySqlConnection connection = new MySqlConnection(connectionString =
+                                                                "SERVER=" + server + ";" +
+                                                                "DATABASE=" + database + ";" +
+                                                                "UID=" + username + ";" +
+                                                                "PASSWORD=" + password + ";");
 
+                connection.Open();
+                int user_id = currentuser.Id;
+                int movie_id = ((Movies)EditItem).Id;
 
-            //ansluter till databasen
-            MySqlConnection connection = new MySqlConnection(connectionString =
-                                                            "SERVER=" + server + ";" +
-                                                            "DATABASE=" + database + ";" +
-                                                            "UID=" + username + ";" +
-                                                            "PASSWORD=" + password + ";");
+                string query = "INSERT INTO user_movies_lt(user_id, movie_id) VALUES(@user_id, @movie_id);";
 
-            connection.Open();
-            int user_id = currentuser.Id;
-            int movie_id = ((Movies)EditItem).Id;
+                MySqlCommand command = new MySqlCommand(query, connection);
 
-            string query = "INSERT INTO user_movies_lt(user_id, movie_id) VALUES(@user_id, @movie_id);";
+                command.Parameters.AddWithValue("@movie_id", movie_id);
+                command.Parameters.AddWithValue("@user_id", user_id);
 
-            MySqlCommand command = new MySqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@movie_id", movie_id);
-            command.Parameters.AddWithValue("@user_id", user_id);
-
-
-            //crashar///////
-            command.ExecuteNonQuery();
-            connection.Close();
-
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
         }
 
         //Tar bort valda indexet i listboxen av filmer använadren samlat ihop
@@ -129,14 +117,39 @@ namespace MovieRating.UserControls
         {
             currentuser = login.GetCurrentUserLogin();
             var EditItem = UserMovies_box.SelectedItem;
+            var ChoosenMovie = MovieBank_box.SelectedItem;
+
+            if(MovieBank_box.SelectedItem == ChoosenMovie)
+            {
+                return;
+            }
 
             if (UserMovies_box.Items.Count > -1)
             {
                 currentuser.MovieList.Remove((Movies)EditItem);
                 UserMovies_box.Items.Refresh();
+
+                MySqlConnection connection = new MySqlConnection(connectionString =
+                                                            "SERVER=" + server + ";" +
+                                                            "DATABASE=" + database + ";" +
+                                                            "UID=" + username + ";" +
+                                                            "PASSWORD=" + password + ";");
+
+                connection.Open();
+                int user_id = currentuser.Id;
+                int movie_id = ((Movies)EditItem).Id;
+
+                string query = "DELETE FROM user_movies_lt WHERE user_id = @user_id AND movie_id = @movie_id;";
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@movie_id", movie_id);
+                command.Parameters.AddWithValue("@user_id", user_id);
+
+                command.ExecuteNonQuery();
+                connection.Close();
             }
         }
-
 
         //Läser in datan från databasen
         public void LoadMoviesFromDB()
@@ -146,6 +159,7 @@ namespace MovieRating.UserControls
             currentuser.MovieList = db.GiveMoviesToUser();
             UserMovies_box.ItemsSource = currentuser.MovieList;
             MovieBank_box.ItemsSource = db.GetAllMovies();
+            MovieBankCopy = db.GetAllMovies();
         }
 
 
@@ -216,7 +230,7 @@ namespace MovieRating.UserControls
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
             DataBaseConnection db = new DataBaseConnection();
-            MovieBank_box.ItemsSource = db.GetAllMovies();
+            MovieBank_box.ItemsSource = MovieBankCopy;
         }
 
         //Tar användaren till MovieManager där man kan skapa en obefintlig film
@@ -234,11 +248,13 @@ namespace MovieRating.UserControls
 
         private void Review_btn_Click(object sender, RoutedEventArgs e)
         {
-            var chosenMovie = UserMovies_box.SelectedItem;
+            chosenMovie = GetChosenMovie();
 
-            if (UserMovies_box.Items.Count > -1||
-                MovieBank_box.Items.Count > -1)
+            if (UserMovies_box.SelectedItem == chosenMovie)
             {
+                ReviewWindow.Add_Btn.Visibility = Visibility.Visible;
+                ReviewWindow.Create_review_box.Visibility = Visibility.Visible;
+                ReviewWindow.Review_box.Visibility = Visibility.Hidden;
                 ReviewWindow.Visibility = Visibility.Visible;
             }
         }
@@ -249,14 +265,26 @@ namespace MovieRating.UserControls
 
             if (UserMovies_box.Items.Count > -1)
             {
-                ReviewWindow.Visibility= Visibility.Visible;
 
-                //ReviewWindow.Review_box.Text = 
-                //hur läser jag in rviewen? är de från sql man hittar den filmen med rätt review_id och samma movie_id? hur funkar det? 
+                foreach (Review review in ReviewWindow.GetReviews())
+                {
+                    ReviewWindow.Review_box.Items.Add(review.Movie_review);
+                }
 
+                ReviewWindow.Visibility = Visibility.Visible;
+                ReviewWindow.Review_box.Visibility = Visibility.Visible;
+                ReviewWindow.Add_Btn.Visibility = Visibility.Hidden;
+                ReviewWindow.Create_review_box.Visibility = Visibility.Hidden;
+                ReviewWindow.Create_review_box.Visibility = Visibility.Hidden;
             }
+            ReviewWindow.Review_box.Items.Refresh();
         }
 
-        
+        //Ger tillgång till den aktuella filmen till ReviewWindow och MovieMenu
+        public Movies GetChosenMovie()
+        {
+            chosenMovie = (Movies)UserMovies_box.SelectedItem;
+            return chosenMovie;
+        }
     }
 }

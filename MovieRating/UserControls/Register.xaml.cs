@@ -52,6 +52,7 @@ namespace MovieRating.UserControls
             name = User_box.Text;
             user_password = Psw_box.Password;
             string repeatPsw = Repeat_Box.Password;
+            int nextID = 0;
 
             //Användarnamn måste var längre än 5 tecken
             Regex regex = new Regex(@"^[a-zA-Z0-9]{6,}$");
@@ -76,7 +77,8 @@ namespace MovieRating.UserControls
                 }
                 else
                 {
-                    UserList.Add(new User(name, user_password));
+                    nextID = GethighestUserId();
+                    UserList.Add(new User(nextID,name, user_password));
                     AddUsersToDB();
                     User_box.Clear();
                     Psw_box.Clear();
@@ -88,6 +90,16 @@ namespace MovieRating.UserControls
                 Lbl_UsrN_error.Visibility = Visibility.Visible;
                 RegisterOK = false;
             }
+        }
+        //hämtar och lägger till
+        private int GethighestUserId()
+        {
+            int nextid = 0;
+            foreach(User user in UserList)
+            {
+                nextid++;
+            }
+            return nextid;
         }
 
         //om regexen är korrekt kommer användaren till Login annars är den kvar.
@@ -160,7 +172,7 @@ namespace MovieRating.UserControls
             string server = "localhost";
             string database = "MovieRating";
             string username = "root";
-            string password = "Ktmpappa#27";
+            string password = "";
             string connectionString = "";
 
             MySqlConnection connection = new MySqlConnection(connectionString =
@@ -181,8 +193,9 @@ namespace MovieRating.UserControls
             {
                 if (!UserList.Contains(reader["username"]))
                 {
-                    User user = new User((string)reader["username"],
-                                    (string)reader["PASSWORD"]);
+                    User user = new User((int)reader["user_id"],
+                                         (string)reader["username"],
+                                         (string)reader["PASSWORD"]); 
 
                     UserList.Add(user);
                 }

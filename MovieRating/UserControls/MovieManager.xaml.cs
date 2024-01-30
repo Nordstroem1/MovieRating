@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Permissions;
@@ -14,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit;
+using ZstdSharp.Unsafe;
 
 namespace MovieRating.UserControls
 {
@@ -23,14 +26,17 @@ namespace MovieRating.UserControls
         Login login;
         MovieMenu movieMenu;
         User currentuser = null;
-
+        string server = "localhost";
+        string database = "MovieRating";
+        string username = "root";
+        string password = "";
+        string connectionString = "";
 
         public MovieManager()
         {
             InitializeComponent();
         }
 
-        
         //Sätter värdet av login.
         public void SetLogin(Login login)
         {
@@ -60,12 +66,16 @@ namespace MovieRating.UserControls
             }
         }
 
-        //lägger till en film i MovieList
+        //HÄR LÄGGER ANVÄNDAREN TILL I LINKTABLET OCH I MOVIES
         private void AddMovies()
         {
-            //funkar detta?????+ verkar så när jag debuggar???? smidigare sätt????
             currentuser = login.GetCurrentUserLogin();
-            
+            int id = 0;
+            string title = null;
+            string genra = null;
+            string description = null;
+            string length = null;
+
             if (Title_box.Text != "" &&
             Genra_box.Text != "" &&
             Description_box.Text != "" &&
@@ -73,20 +83,19 @@ namespace MovieRating.UserControls
             {
                 ErrorFeild_label.Visibility = Visibility.Hidden;
 
-                int id = 0;
-                string title = Title_box.Text;
-                string genra = Genra_box.Text;
-                string description = Description_box.Text;
-                string length = Length_box.Text;
+                title = Title_box.Text;
+                genra = Genra_box.Text;
+                description = Description_box.Text;
+                length = Length_box.Text;
                 
                 foreach(Movies movie in movieMenu.MovieBankCopy)
                 {
-                    if (movie.Id >= id) { id = movie.Id + 1; }
+                    id++;
                 }
+                id ++;
                 currentuser.MovieList.Add(new Movies(id, title, genra, description, length));
 
                 Movie_box.Items.Refresh();
-
                 Title_box.Clear();
                 Genra_box.Clear();
                 Description_box.Clear();
@@ -96,9 +105,41 @@ namespace MovieRating.UserControls
             {
                 ErrorFeild_label.Visibility = Visibility.Visible;
             }
+
+            MySqlConnection connection = new MySqlConnection(connectionString =
+                                                           "SERVER=" + server + ";" +
+                                                           "DATABASE=" + database + ";" +
+                                                           "UID=" + username + ";" +
+                                                           "PASSWORD=" + password + ";");
+
+            connection.Open();
+            int user_id = currentuser.Id;
+            int movie_id = id;
+            string query = "INSERT INTO movies(movie_id, title, description, genra, length) " +
+                           "VALUES (@movie_id, @title, @description, @genra, @length);";
+
+            string query1 = "INSERT INTO user_movies_lt(user_id, movie_id) VALUES(@user_id, @movie_id);";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            MySqlCommand command1 = new MySqlCommand(query1, connection);
+
+            command.Parameters.AddWithValue("@movie_id", movie_id);
+            command.Parameters.AddWithValue("@title", title);
+            command.Parameters.AddWithValue("@description", description);
+            command.Parameters.AddWithValue("@genra", genra);
+            command.Parameters.AddWithValue("@length", length);
+
+            command1.Parameters.AddWithValue("@movie_id", movie_id);
+            command1.Parameters.AddWithValue("@user_id", user_id);
+            
+            command.ExecuteNonQuery();
+            command1.ExecuteNonQuery();
+            connection.Close();
         }
 
-        //Objektet användaren klickar på ska dyka upp i respektive box/slider.
+
+        
+        //Objektet användaren klickar på ska dyka upp i respektive box.
         private void Edit_btn_Click(object sender, RoutedEventArgs e)
         {
             if (Movie_box.Items.Count > -1)
@@ -121,6 +162,12 @@ namespace MovieRating.UserControls
             var selecteditem = Movie_box.SelectedItem;
             int index = currentuser.MovieList.IndexOf((Movies)selecteditem);
 
+            int movie_id = ((Movies)selecteditem).Id;
+            string title = Title_box.Text;
+            string genra = Genra_box.Text;
+            string description = Description_box.Text;
+            string length = Length_box.Text;
+
             if (index != -1)
             {
                 currentuser.MovieList[index].Title = Title_box.Text;
@@ -129,13 +176,33 @@ namespace MovieRating.UserControls
                 currentuser.MovieList[index].Length = $"{Length_box.Text} h";
 
                 Movie_box.Items.Refresh();
+
+                MySqlConnection connection = new MySqlConnection(connectionString =
+                                                          "SERVER=" + server + ";" +
+                                                          "DATABASE=" + database + ";" +
+                                                          "UID=" + username + ";" +
+                                                          "PASSWORD=" + password + ";");
+                connection.Open();
+
+                string query = "UPDATE movies SET title = @title, genra = @genra, Description = @Description, Length = @Length WHERE movie_id = @movie_id ;";
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@movie_id", movie_id);
+                command.Parameters.AddWithValue("@title", title);
+                command.Parameters.AddWithValue("@genra", genra);
+                command.Parameters.AddWithValue("@description", description);
+                command.Parameters.AddWithValue("@length", length);
+
+                command.ExecuteNonQuery();
+                connection.Close();
                 Save_btn.Visibility = Visibility.Hidden;
 
-                Title_box.Text = "";
-                Genra_box.Text = "";
-                Description_box.Text = "";
-                Length_box.Text = "";
+                Title_box.Clear();
+                Genra_box.Clear();
+                Description_box.Clear();
+                Length_box.Clear();
             }
+            
         }
 
         //Length_box accepterar enbart numerics och , 
