@@ -38,7 +38,6 @@ namespace MovieRating.UserControls
             this.register = register;
             this.movieMenu = movieMenu;
         }
-
         
         private void Login_Click(object sender, RoutedEventArgs e)
         {

@@ -10,7 +10,6 @@ namespace MovieRating
 {
     public class DataBaseConnection
     {
-        //Här skall allt hämtas, filmer, users, reviews
         string server = "localhost";
         string database = "MovieRating"; 
         string username = "root";
@@ -29,9 +28,8 @@ namespace MovieRating
         }
 
         //hämtar användare, filmer och get filmer till rätt användare.
-        public List<Movies> GiveMoviesToUser()
+        public void GiveMoviesToUser(User user1)
         {
-          
             List<Movies> UserMovies = new List<Movies>();
             Dictionary<int,Movies> UserMovieDic = new Dictionary<int,Movies>();
 
@@ -40,11 +38,10 @@ namespace MovieRating
             connection.Open();
 
             string query = "SELECT * FROM user_movies;";
-            
-            //Kör kommandot "queryn" vi skickade in, i mysql
+        
             MySqlCommand command = new MySqlCommand(query, connection);
 
-            //ExecuteReader() används om inget returns, vilket det inte görs i ett SELECT-kommando
+            //ExecuteReader() används om n rågot retuneras, vilket det görs i ett SELECT-kommando
             MySqlDataReader reader = command.ExecuteReader();
 
             while(reader.Read())
@@ -73,19 +70,14 @@ namespace MovieRating
 
                     userDic.Add((int)reader["user_id"], user);
                 }
-                //Ger rätt film till rätt användare.
-                userDic[user_id].MovieList.Add(UserMovieDic[movie_id]);
+
+                if(user1.Id == user_id)
+                {
+                    //Ger rätt film till rätt användare.
+                    user1.MovieList.Add(UserMovieDic[movie_id]);
+                }
             }
-
-            //lägger till värdena från dictionary till film-listan
-            foreach (Movies movie in UserMovieDic.Values)
-            {
-                UserMovies.Add(movie);
-            }
-
-            connection.Close();
-
-            return UserMovies;
+             connection.Close();
         }
         
         //denna funktion ska ge värdet till MovieListboxen där samtliga filmer dyker upp

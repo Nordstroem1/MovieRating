@@ -2,12 +2,14 @@ CREATE DATABASE	IF NOT EXISTS MovieRating;
 
 USE movierating; 
 
+DROP TABLE IF EXISTS Users;
 CREATE TABLE IF NOT EXISTS Users (
 	user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50),
     PASSWORD VARCHAR(50)
 );
 
+DROP TABLE IF EXISTS movies;
 CREATE TABLE IF NOT EXISTS movies(
 	movie_id INT PRIMARY KEY,
     title VARCHAR(50),
@@ -16,18 +18,21 @@ CREATE TABLE IF NOT EXISTS movies(
     length VARCHAR(10)
 );
 
+DROP TABLE IF EXISTS review;
 CREATE TABLE IF NOT EXISTS review(
 	movie_id INT,
-    review_id INT,
+    review_id INT PRIMARY KEY AUTO_INCREMENT,
     review_date DATETIME,
-    user_review VARCHAR(350)
+    user_review VARCHAR(350),
+    FOREIGN KEY(movie_id) REFERENCES movies(movie_id)
 );
 
-
+DROP TABLE IF EXISTS user_movies_lt;
 CREATE TABLE IF NOT EXISTS user_movies_lt(
 	user_id INT,
     movie_id INT,
-    PRIMARY KEY(user_id, movie_id)
+    FOREIGN KEY(movie_id) REFERENCES movies(movie_id),
+    FOREIGN KEY(user_id) REFERENCES Users(user_id) 
 );
 
 INSERT INTO movies (movie_id, title, description, genra, length)
@@ -67,7 +72,6 @@ ON movies(genra);
 
 SHOW INDEXES FROM movies;
 
-DROP PROCEDURE insert_user;
 -- funktion för att sätta in en användare--
 DELIMITER $$
 CREATE PROCEDURE insert_user(
@@ -81,15 +85,9 @@ BEGIN
 END$$
 DELIMITER ;
 
-SET sql_safe_updates = 1;
 
-CREATE VIEW user_movies AS
-SELECT *
-FROM Users
-JOIN user_movie_lt ON Users.user_id = user_movie_lt.user_id
-JOIN movies ON movies.movie_id = user_movie_lt.movie_id;
-
-SELECT * FROM user_movies_lt;
-SELECT * FROM users;
-SELECT * FROM movies;
-
+CREATE OR REPLACE VIEW user_movies AS
+SELECT u.user_id, u.username, u.PASSWORD, m.movie_id, m.title, m.genra, m.description, m.length
+FROM Users u
+JOIN user_movies_lt ON u.user_id = user_movies_lt.user_id
+JOIN movies m ON m.movie_id = user_movies_lt.movie_id;

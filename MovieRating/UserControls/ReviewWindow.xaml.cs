@@ -49,7 +49,6 @@ namespace MovieRating.UserControls
             int movie_id = movie.Id;
             DateTime date = DateTime.Now;
 
-
             if (Create_review_box.Text != "")
             {
                 review = Create_review_box.Text + "\n";
@@ -80,44 +79,50 @@ namespace MovieRating.UserControls
         //hämtar alla reviews som tillhör rätt film från Databasen, retunerar en listan till review window!
         public List<Review> GetReviews()
         {
-            List<Review> reviewList = new List<Review>();
             Movies chosenMovie = movieMenu.GetChosenMovie();
-            int movie_id = chosenMovie.Id;
-            int review_id = 0;
-
-            MySqlConnection connection = new MySqlConnection(connectionString =
-                                                           "SERVER=" + server + ";" +
-                                                           "DATABASE=" + database + ";" +
-                                                           "UID=" + username + ";" +
-                                                           "PASSWORD=" + password + ";");
-            connection.Open();
-
-            string query = "SELECT * FROM review WHERE movie_id = @movie_id;";
-
-            MySqlCommand command = new MySqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@movie_id", movie_id);
-            command.Parameters.AddWithValue("@review_id", review_id);
-            MySqlDataReader reader = command.ExecuteReader();
-
-            //Lägger till reviewn om den inte redan existerar
-            while (reader.Read())
+            if (movieMenu.UserMovies_box.Items.Contains(chosenMovie))
             {
-                Review review = new Review((int)reader["review_id"], (string)reader["user_review"]);
 
-                if (!chosenMovie.ReviewDic.ContainsKey(review.Review_Id))
+
+
+                List<Review> reviewList = new List<Review>();
+                int movie_id = chosenMovie.Id;
+                int review_id = 0;
+
+                MySqlConnection connection = new MySqlConnection(connectionString =
+                                                               "SERVER=" + server + ";" +
+                                                               "DATABASE=" + database + ";" +
+                                                               "UID=" + username + ";" +
+                                                               "PASSWORD=" + password + ";");
+                connection.Open();
+
+                string query = "SELECT * FROM review WHERE movie_id = @movie_id;";
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@movie_id", movie_id);
+                command.Parameters.AddWithValue("@review_id", review_id);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                //Lägger till reviewn om den inte redan existerar
+                while (reader.Read())
                 {
-                    chosenMovie.ReviewDic.Add(review.Review_Id, review);
+                    Review review = new Review((int)reader["review_id"], (string)reader["user_review"]);
+
+                    if (!chosenMovie.ReviewDic.ContainsKey(review.Review_Id))
+                    {
+                        chosenMovie.ReviewDic.Add(review.Review_Id, review);
+                    }
                 }
-            }
 
-            foreach (Review review in chosenMovie.ReviewDic.Values)
-            {
-                reviewList.Add(review);
+                foreach (Review review in chosenMovie.ReviewDic.Values)
+                {
+                    reviewList.Add(review);
+                }
+                connection.Close();
+                return reviewList;
             }
-            connection.Close();
-            return reviewList;
+            return null;
         }
-
     }
 } 

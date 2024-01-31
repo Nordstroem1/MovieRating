@@ -87,29 +87,26 @@ namespace MovieRating.UserControls
             currentuser = login.GetCurrentUserLogin();
             var EditItem = MovieBank_box.SelectedItem;
 
-            if (!UserMovies_box.Items.Contains(chosenMovie))
-            {
-                //ansluter till databasen
-                MySqlConnection connection = new MySqlConnection(connectionString =
-                                                                "SERVER=" + server + ";" +
-                                                                "DATABASE=" + database + ";" +
-                                                                "UID=" + username + ";" +
-                                                                "PASSWORD=" + password + ";");
+            //ansluter till databasen
+            MySqlConnection connection = new MySqlConnection(connectionString =
+                                                            "SERVER=" + server + ";" +
+                                                            "DATABASE=" + database + ";" +
+                                                            "UID=" + username + ";" +
+                                                            "PASSWORD=" + password + ";");
 
-                connection.Open();
-                int user_id = currentuser.Id;
-                int movie_id = ((Movies)EditItem).Id;
+            connection.Open();
+            int user_id = currentuser.Id;
+            int movie_id = ((Movies)EditItem).Id;
 
-                string query = "INSERT INTO user_movies_lt(user_id, movie_id) VALUES(@user_id, @movie_id);";
+            string query = "INSERT INTO user_movies_lt(user_id, movie_id) VALUES(@user_id, @movie_id);";
 
-                MySqlCommand command = new MySqlCommand(query, connection);
+            MySqlCommand command = new MySqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@movie_id", movie_id);
-                command.Parameters.AddWithValue("@user_id", user_id);
+            command.Parameters.AddWithValue("@movie_id", movie_id);
+            command.Parameters.AddWithValue("@user_id", user_id);
 
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
+            command.ExecuteNonQuery();
+            connection.Close();
         }
 
         //Tar bort valda indexet i listboxen av filmer använadren samlat ihop
@@ -118,11 +115,6 @@ namespace MovieRating.UserControls
             currentuser = login.GetCurrentUserLogin();
             var EditItem = UserMovies_box.SelectedItem;
             var ChoosenMovie = MovieBank_box.SelectedItem;
-
-            if(MovieBank_box.SelectedItem == ChoosenMovie)
-            {
-                return;
-            }
 
             if (UserMovies_box.Items.Count > -1)
             {
@@ -156,7 +148,7 @@ namespace MovieRating.UserControls
         {
             currentuser = login.GetCurrentUserLogin();
             DataBaseConnection db = new DataBaseConnection();
-            currentuser.MovieList = db.GiveMoviesToUser();
+            db.GiveMoviesToUser(currentuser);
             UserMovies_box.ItemsSource = currentuser.MovieList;
             MovieBank_box.ItemsSource = db.GetAllMovies();
             MovieBankCopy = db.GetAllMovies();
