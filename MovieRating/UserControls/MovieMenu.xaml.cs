@@ -109,7 +109,7 @@ namespace MovieRating.UserControls
             connection.Close();
         }
 
-        //Tar bort valda indexet i listboxen av filmer använadren samlat ihop
+        //Tar bort valda indexen i listboxen av filmer använadren samlat ihop
         private void RemoveMovie()
         {
             currentuser = login.GetCurrentUserLogin();
@@ -143,7 +143,8 @@ namespace MovieRating.UserControls
             }
         }
 
-        //Läser in datan från databasen
+        //Läser in datan från databasen, och skickar med den nuvarande användaren-
+        //så att den inloggade användaren får dem rätta filmerna.
         public void LoadMoviesFromDB()
         {
             currentuser = login.GetCurrentUserLogin();
@@ -154,7 +155,7 @@ namespace MovieRating.UserControls
             MovieBankCopy = db.GetAllMovies();
         }
 
-
+        //Filtrerar ut alla filmer som inte är drama.
         private void Drama_movies_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<int, Movies> DramaDic = new Dictionary<int, Movies>();
@@ -187,6 +188,7 @@ namespace MovieRating.UserControls
             connection.Close();
         }
 
+        //Filtrerar film listan med filmernas längd.
         private void LengtBtn_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<int, Movies> LengthDic = new Dictionary<int, Movies>();
@@ -219,13 +221,14 @@ namespace MovieRating.UserControls
             connection.Close();
         }
 
+        //Tar tillbaka formatet på filmerna i ofiltrerad ordning.
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
             DataBaseConnection db = new DataBaseConnection();
             MovieBank_box.ItemsSource = MovieBankCopy;
         }
 
-        //Tar användaren till MovieManager där man kan skapa en obefintlig film
+        //Tar användaren till MovieManager där den kan skapa en obefintlig film
         private void CreateMovie_btn_Click(object sender, RoutedEventArgs e)
         {
             if(this.Visibility == Visibility.Visible)
@@ -237,7 +240,7 @@ namespace MovieRating.UserControls
         }
 
 
-
+        //hämtar den valda filmen och visa reviewWindow där anvädnaren kan skapa en review
         private void Review_btn_Click(object sender, RoutedEventArgs e)
         {
             chosenMovie = GetChosenMovie();
@@ -251,6 +254,7 @@ namespace MovieRating.UserControls
             }
         }
 
+        //användaren kan enbart läsa reviews.
         private void Read_review_btn_Click(object sender, RoutedEventArgs e)
         {
             var chosenMovie = UserMovies_box.SelectedItem;

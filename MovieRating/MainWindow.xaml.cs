@@ -9,8 +9,7 @@ namespace MovieRating
             InitializeComponent();
             login.SetWindows(register,moviemanager,moviemenu);
             register.SetLogin(login);
-            moviemanager.SetLogin(login);
-            moviemanager.SetMovieMenu(moviemenu);
+            moviemanager.SetWindows(moviemenu,login);
             moviemenu.SetWindows(login,moviemanager,reviewwindow);
             reviewwindow.SetMovieMenu(moviemenu);
         }

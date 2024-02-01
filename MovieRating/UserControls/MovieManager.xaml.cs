@@ -37,15 +37,12 @@ namespace MovieRating.UserControls
             InitializeComponent();
         }
 
-        //Sätter värdet av login.
-        public void SetLogin(Login login)
-        {
-            this.login = login;
-        }
-        //Sätter värdet av Moviemenu.
-        public void SetMovieMenu(MovieMenu movieMenu)
+        
+        //Sätter värdet av Moviemenu och login
+        public void SetWindows(MovieMenu movieMenu, Login login)
         {
             this.movieMenu = movieMenu;
+            this.login = login;
         }
         
         private void Add_btn_Click(object sender, RoutedEventArgs e)
@@ -53,7 +50,7 @@ namespace MovieRating.UserControls
             AddMovies();   
         }
          
-        //Tar bort filmen man valt i listboxen. om den finns.
+        //Tar bort filmen man valt i listboxen. om den finns. 
         private void Remove_btn_Click(object sender, RoutedEventArgs e)
         {
             if (Movie_box.SelectedItems.Count > 0)
@@ -66,7 +63,7 @@ namespace MovieRating.UserControls
             }
         }
 
-        //HÄR LÄGGER ANVÄNDAREN TILL I LINKTABLET OCH I MOVIES
+        //Användaren lägger till sin skapade film i databasen.
         private void AddMovies()
         {
             currentuser = login.GetCurrentUserLogin();
@@ -216,7 +213,7 @@ namespace MovieRating.UserControls
                 e.Handled = true;
             }
         }
-
+        //tar användaren tillbaks till movieMenu
         private void Back_Menu_btn_Click(object sender, RoutedEventArgs e)
         {
             if(this.Visibility == Visibility.Visible)

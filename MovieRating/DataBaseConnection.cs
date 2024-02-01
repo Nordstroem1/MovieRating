@@ -73,7 +73,7 @@ namespace MovieRating
 
                 if(user1.Id == user_id)
                 {
-                    //Ger rätt film till rätt användare.
+                    //Ger rätt film till den inloggade användaren
                     user1.MovieList.Add(UserMovieDic[movie_id]);
                 }
             }

@@ -42,9 +42,6 @@ namespace MovieRating.UserControls
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             LoginUser();
-            Username_box.Clear();
-            Password_box.Clear();
-
         }
         //visar registrerings fönstret,tar bort error meddelanden
         private void ToRegister_btn_Click(object sender, RoutedEventArgs e)
@@ -66,6 +63,8 @@ namespace MovieRating.UserControls
                 currentUser = GetCurrentUserLogin();
                 movieMenu.Visibility = Visibility.Visible;
                 movieMenu.LoadMoviesFromDB();
+                Password_box.Clear();
+                Username_box.Clear();
             }
             else
             {

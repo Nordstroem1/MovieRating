@@ -166,7 +166,7 @@ namespace MovieRating.UserControls
             connection.Close();
         }
 
-        //hämtar alla användare från Databasen.
+        //hämtar alla användare från Databasen, finns dem ej så läggs dem till i UserList
         public void GetUserFromDb()
         {
             string server = "localhost";

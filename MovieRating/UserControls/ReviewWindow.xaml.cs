@@ -31,7 +31,7 @@ namespace MovieRating.UserControls
         {
             InitializeComponent();
         }
-
+        //Sätter värdet på movieMenu
         public void SetMovieMenu(MovieMenu movieMenu)
         {
             this.movieMenu = movieMenu;
@@ -42,6 +42,7 @@ namespace MovieRating.UserControls
             this.Visibility = Visibility.Hidden;
         }
 
+        //Lägger till Review i databasen, DateTime används inte i programmet men loggas enbart i databasen.
         private void Add_Btn_Click(object sender, RoutedEventArgs e)
         {
             string review = null;
